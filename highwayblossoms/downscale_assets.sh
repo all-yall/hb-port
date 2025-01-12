@@ -27,7 +27,6 @@ downscale_video() {
 
   ffmpeg  -i "$original" \
     -vf "scale=iw/$SCALE_FACTOR:ih/$SCALE_FACTOR,fps=$LOWER_FPS" \
-    -preset medium \
     -crf 23 \
     -c:a aac -b:a 128k \
     "$lowres" 

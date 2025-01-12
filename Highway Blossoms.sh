@@ -1,4 +1,5 @@
 #!/bin/bash
+# PORTMASTER: highwayblossoms.zip, Highway Blossoms.sh
 
 
 # Prelude
@@ -18,7 +19,6 @@ source $controlfolder/control.txt
 [ -f "${controlfolder}/mod_${CFW_NAME}.txt" ] && source "${controlfolder}/mod_${CFW_NAME}.txt"
 get_controls
 
-
 # Variables
 PORTEXEC="HighwayBlossoms.sh"
 PORTLOC="/$directory/ports/highwayblossoms"
@@ -31,9 +31,7 @@ export SDL_VIDEO_EGL_DRIVER="$GL4ES_LIBS/libEGL.so.1"
 
 cd $PORTLOC
 
-./downscale_assets.sh
-
-cd gamefiles
+set -e
 
 > "$PORTLOC/log.txt" && exec > >(tee "$GAMEDIR/log.txt") 2>&1
 
@@ -43,6 +41,10 @@ if [ -f "${controlfolder}/libgl_${CFW_NAME}.txt" ]; then
 else
   source "${controlfolder}/libgl_default.txt"
 fi
+
+./downscale_assets.sh
+
+cd gamefiles
 
 pm_platform_helper "$PORTLOC/gamefiles/$PORTEXEC"
 
