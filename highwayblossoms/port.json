@@ -18,7 +18,12 @@
     "genres": [
       "visual novel"
     ],
-    "image": null,
+    "image": {
+      "screenshot": "screenshot.png",
+      "covers": [],
+      "thumbnail": null,
+      "video": null
+    },
     "rtr": true,
     "exp": false,
     "runtime": null,
