@@ -12,13 +12,10 @@ LOWER_FPS=30
 # what quality are scaled down videos reduced to? higher is worse
 LOW_SCALE_VIDEO_QUALITY=15
 # what quality are non scaled down videos reduced to? higher is worse
-HIGH_SCALE_VIDEO_QUALITY=15
+HIGH_SCALE_VIDEO_QUALITY=20
 
 
-# it will read stdin and mess with while read loops,
-# so we need to turn that off. And additionally make 
-# the output not cover the entire screen
-
+chmod +x ./ffmpeg
 
 check_marker() {
   marker="$1.lowres"
@@ -46,7 +43,7 @@ downscale_video() {
 
   echo "$original"
 
-  ffmpeg -nostdin -v error -i "$original" \
+  ./ffmpeg -nostdin -v error -i "$original" \
     -vf "scale=iw/$SCALE_FACTOR:ih/$SCALE_FACTOR,fps=$LOWER_FPS" \
     -crf "$LOW_SCALE_VIDEO_QUALITY" \
     -c:a aac -b:a 128k \
@@ -69,7 +66,7 @@ downsample_video() {
 
   echo "$original"
 
-  ffmpeg -nostdin -v error -i "$original" \
+  ./ffmpeg -nostdin -v error -i "$original" \
     -crf "$HIGH_SCALE_VIDEO_QUALITY" \
     -c:a aac \
     -b:a 128k \
@@ -91,13 +88,13 @@ downscale_all_pngs_recursively() {
     # due to the expected image resolutions, we need to scale down
     # then scale back up using nearest neighbor to get same size pngs
     # with a disk size reduction
-    ffmpeg -nostdin -v error -i "$file" \
+    ./ffmpeg -nostdin -v error -i "$file" \
       -vf "scale=iw/${SCALE_FACTOR}:ih/${SCALE_FACTOR}" \
       "$temp_file"
 
     rm "$file"
 
-    ffmpeg -nostdin -v error -nostdin -v error -i "$temp_file" \
+    ./ffmpeg -nostdin -v error -nostdin -v error -i "$temp_file" \
       -sws_flags neighbor \
       -vf "scale=iw*${SCALE_FACTOR}:ih*${SCALE_FACTOR}" \
       "$file"
@@ -114,7 +111,7 @@ downscale_all_jpgs_recursively() {
     echo "$file"
 
     # on the other hand jpgs are easy
-    ffmpeg -nostdin -v error -nostdin -v error -i "$file" -q:v $JPG_QUALITY "$temp_file"
+    ./ffmpeg -nostdin -v error -nostdin -v error -i "$file" -q:v $JPG_QUALITY "$temp_file"
 
     mv "$temp_file" "$file"
   done
