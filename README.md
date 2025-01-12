@@ -33,6 +33,9 @@ RAM
 so similarly it is a little wonky on the gamepad navigating some of the menus,
 but it does work.
 
+* DLC files should work, though the next exit dlc will double the time for the first
+launch to actually start due to the increased number of files to downscale
+
 ## Thanks To;
 * [Studio Elan](https://vnstudioelan.com/) for making awesome visual novels, please check them out
 * [Portmaster](https://portmaster.games/) and their framwork and community

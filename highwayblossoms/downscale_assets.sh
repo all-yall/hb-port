@@ -145,6 +145,12 @@ downscale_renpy_archive() {
   put_marker "$original"
 }
 
+maybe_downscale_renpy_archive() {
+  if [ -f "$1" ]; then
+    downscale_renpy_archive "$1"
+  fi
+}
+
 # renpy doens't make this video fill the screen when its downscaled,
 # So instead downsample
 downsample_video ./gamefiles/game/media/NamiTools-ElanBootLogo-HBlossoms-Akemi-1080p60.mkv
@@ -155,6 +161,8 @@ downscale_video ./gamefiles/game/media/ed.mkv
 downscale_renpy_archive ./gamefiles/game/archive.rpa
 downscale_renpy_archive ./gamefiles/game/sound.rpa
 downscale_renpy_archive ./gamefiles/game/tl.rpa
+maybe_downscale_renpy_archive ./gamefiles/game/adult.rpa
+maybe_downscale_renpy_archive ./gamefiles/game/nextexit.rpa
 
 # Remove uneeded large game files
 rm -rf ./gamefiles/lib/py3-linux-armv7l
