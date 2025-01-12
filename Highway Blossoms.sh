@@ -17,12 +17,12 @@ fi
 
 source $controlfolder/control.txt
 
-# Variables
 PORTEXEC="HighwayBlossoms.sh"
-GAMEDIR="$directory/ports/highwayblossoms"
+GAMEDIR="/$directory/ports/highwayblossoms"
 GL4ES_LIBS="$GAMEDIR/gl4es"
+OTHER_LIBS="$GAMEDIR/libs"
+export LD_LIBRARY_PATH="$GL4ES_LIBS:$OTHER_LIBS:$LD_LIBRARY_PATH"
 
-# Exports
 export SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig"
 
 [ -f "${controlfolder}/mod_${CFW_NAME}.txt" ] && source "${controlfolder}/mod_${CFW_NAME}.txt"
@@ -37,6 +37,7 @@ if [ ! -f "$GAMEDIR/has_been_patched" ]; then
 	export PATCHER_GAME="Highway Blossoms"
 	export PATCHER_TIME="15 to 20 minutes"
 	export PATCHDIR="$GAMEDIR"
+  export LOVE_GRAPHICS_USE_OPENGLES=1
 
 	# This will take a WHILE if this is the first run!
 	source "$controlfolder/utils/patcher.txt" || true
