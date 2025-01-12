@@ -169,4 +169,5 @@ rm -rf ./gamefiles/lib/py3-linux-armv7l
 rm -rf ./gamefiles/lib/py3-linux-i686
 rm -rf ./gamefiles/lib/py3-windows-i686
 rm -rf ./gamefiles/lib/py3-mac-universal
-rm -rf ./gamefiles/lib/HighwayBlossoms.app
+rm -rf ./gamefiles/lib/py3-windows-x86_64/
+rm -rf ./gamefiles/HighwayBlossoms.app
