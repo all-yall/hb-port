@@ -16,10 +16,10 @@
 This is a port of the game [Highway Blossoms](https://vnstudioelan.itch.io/highway-blossoms) 
 using the framework [Portmaster](https://portmaster.games/). This does not include
 any game files, but with them you should be able to play the game on some handheld devices
-such as 
+such as the RG35XXSP and other aarch64 architecture devices.
 
 ## How do I use it? 
-drop the entire contents of the 'Highway\ Blossoms\ 1.2.5\ -\ Unified/' folder
+drop the entire contents of the `Highway\ Blossoms\ 1.2.5\ -\ Unified/` folder
 provided by buying the game on itch.io and then run the `./Highway Blossoms.sh`
 script to start it.
 
