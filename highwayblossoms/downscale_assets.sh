@@ -156,8 +156,6 @@ downscale_video ./gamefiles/game/media/op.mkv
 downscale_video ./gamefiles/game/media/ed.mkv
 
 downscale_renpy_archive ./gamefiles/game/archive.rpa
-downscale_renpy_archive ./gamefiles/game/sound.rpa
-downscale_renpy_archive ./gamefiles/game/tl.rpa
 maybe_downscale_renpy_archive ./gamefiles/game/adult.rpa
 maybe_downscale_renpy_archive ./gamefiles/game/nextexit.rpa
 
