@@ -16,24 +16,38 @@ else
 fi
 
 source $controlfolder/control.txt
-[ -f "${controlfolder}/mod_${CFW_NAME}.txt" ] && source "${controlfolder}/mod_${CFW_NAME}.txt"
-get_controls
 
 # Variables
 PORTEXEC="HighwayBlossoms.sh"
-PORTLOC="/$directory/ports/highwayblossoms"
-GL4ES_LIBS="$PORTLOC/gl4es"
+GAMEDIR="$directory/ports/highwayblossoms"
+GL4ES_LIBS="$GAMEDIR/gl4es"
 
 # Exports
 export SDL_GAMECONTROLLERCONFIG="$sdl_controllerconfig"
-export SDL_VIDEO_GL_DRIVER="$GL4ES_LIBS/libGL.so.1"
-export SDL_VIDEO_EGL_DRIVER="$GL4ES_LIBS/libEGL.so.1"
 
-cd $PORTLOC
+[ -f "${controlfolder}/mod_${CFW_NAME}.txt" ] && source "${controlfolder}/mod_${CFW_NAME}.txt"
+get_controls
+
+cd "$GAMEDIR"
 
 set -e
 
-> "$PORTLOC/log.txt" && exec > >(tee "$GAMEDIR/log.txt") 2>&1
+if [ ! -f "$GAMEDIR/has_been_patched" ]; then
+	export PATCHER_FILE="$GAMEDIR/downscale_assets.sh"
+	export PATCHER_GAME="Highway Blossoms"
+	export PATCHER_TIME="15 to 20 minutes"
+	export PATCHDIR="$GAMEDIR"
+
+	# This will take a WHILE if this is the first run!
+	source "$controlfolder/utils/patcher.txt" || true
+	touch "$GAMEDIR/has_been_patched"
+fi
+
+# these interfere with the patcher, so the are below 
+export SDL_VIDEO_GL_DRIVER="$GL4ES_LIBS/libGL.so.1"
+export SDL_VIDEO_EGL_DRIVER="$GL4ES_LIBS/libEGL.so.1"
+
+> "$GAMEDIR/log.txt" && exec > >(tee "$GAMEDIR/log.txt") 2>&1
 
 # If using gl4es
 if [ -f "${controlfolder}/libgl_${CFW_NAME}.txt" ]; then 
@@ -42,14 +56,11 @@ else
   source "${controlfolder}/libgl_default.txt"
 fi
 
-echo "Downscaling assets" > /dev/tty0
-echo "This will take a WHILE (15 minutes) if this is the first run!" > /dev/tty0
 
-./downscale_assets.sh
 cd gamefiles
 
-pm_platform_helper "$PORTLOC/gamefiles/lib/py3-linux-aarch64/HighwayBlossoms"
-$GPTOKEYB "HighwayBlossoms" -c "$PORTLOC/highwayblossoms.gptk" &
+pm_platform_helper "$GAMEDIR/gamefiles/lib/py3-linux-aarch64/HighwayBlossoms"
+$GPTOKEYB "HighwayBlossoms" -c "$GAMEDIR/highwayblossoms.gptk" &
 
 bash "./$PORTEXEC"
 
