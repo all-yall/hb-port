@@ -48,8 +48,8 @@ echo "This will take a WHILE (15 minutes) if this is the first run!" > /dev/tty0
 ./downscale_assets.sh
 cd gamefiles
 
-pm_platform_helper "$PORTLOC/gamefiles/$PORTEXEC"
-$GPTOKEYB "HighwayBlossoms" -c "$GAMEDIR/iconoclasts.gptk" &
+pm_platform_helper "$PORTLOC/gamefiles/lib/py3-linux-aarch64/HighwayBlossoms"
+$GPTOKEYB "HighwayBlossoms" -c "$PORTLOC/highwayblossoms.gptk" &
 
 bash "./$PORTEXEC"
 
