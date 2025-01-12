@@ -42,14 +42,16 @@ else
   source "${controlfolder}/libgl_default.txt"
 fi
 
-./downscale_assets.sh
+echo "Downscaling assets" > /dev/tty0
+echo "This will take a WHILE (15 minutes) if this is the first run!" > /dev/tty0
 
+./downscale_assets.sh
 cd gamefiles
 
 pm_platform_helper "$PORTLOC/gamefiles/$PORTEXEC"
+$GPTOKEYB "HighwayBlossoms" -c "$GAMEDIR/iconoclasts.gptk" &
 
-"./$PORTEXEC"
+bash "./$PORTEXEC"
 
 pm_finish
-
 $ESUDO kill -9 $(pidof gptokeyb)

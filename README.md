@@ -1,7 +1,16 @@
 # Port of Highway Blossoms
 ## Controls
 
-TODO
+| Button | Action |
+|--|--| 
+|A|Confirm/Next|
+|B|Cancel|
+|X|Toggle Auto|
+|Y|Toggle Overlay|
+|D-Pad|Navigation|
+|Start|Toggle Menu|
+|L1|Back|
+|R1/L2|Skip|
 
 ## What is this?
 This is a port of the game [Highway Blossoms](https://vnstudioelan.itch.io/highway-blossoms) 

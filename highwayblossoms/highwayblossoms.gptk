@@ -1,23 +1,24 @@
-back = enter
-start = esc
-a = mouse_left
-b = mouse_left
-x = mouse_left
-y = mouse_left
+back = \"
+start = \"
+a = \"
+b = \"
+x = \"
+y = \"
+
 l1 = \"
 l2 = \"
-r1 = mouse_slow
+l3 = \"
+
+r1 = mouse_left
 r2 = \"
+r3 = \"
+
 up = \"
 down = \" 
 left = \"
 right = \"
-left_analog_up = mouse_movement_up
-left_analog_down = mouse_movement_down
-left_analog_left = mouse_movement_left
-left_analog_right = mouse_movement_right
-right_analog_up = mouse_left
-right_analog_down = mouse_right
-deadzone_triggers = 3000
-mouse_scale = 6000
-mouse_delay = 16
+
+right_analog_up = \"
+right_analog_down = \" 
+right_analog_left = \"
+right_analog_right = \"
