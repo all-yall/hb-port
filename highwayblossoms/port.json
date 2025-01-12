@@ -1,0 +1,33 @@
+{
+  "version": 3,
+  "name": "highwayblossoms.zip",
+  "items": [
+    "Highway Blossoms.sh",
+    "highwayblossoms"
+  ],
+  "items_opt": [],
+  "attr": {
+    "title": "Highway Blossoms",
+    "porter": [
+      "all_yall"
+    ],
+    "desc": "Highway Blossoms is a short yuri (lesbian) story set in the American Southwest. After an old gold rush miner's journal is discovered, supposedly detailing where he hid parts of his stash, a nationwide craze begins as would-be prospectors try to solve its clues and strike it rich.\n\nAmber couldn't care less. Wandering the desert in a recently-inherited motorhome, she mourns the loss of her grandfather - indifferent and unaware of the hunt happening around her. It's not until she meets Marina, a young hitchhiker lost in New Mexico that the girls get swept up in the rush. ",
+    "desc_md": "# Highway Blossoms\nHighway Blossoms is a short yuri (lesbian) story set in the American Southwest. After an old gold rush miner's journal is discovered, supposedly detailing where he hid parts of his stash, a nationwide craze begins as would-be prospectors try to solve its clues and strike it rich.\n\nAmber couldn't care less. Wandering the desert in a recently-inherited motorhome, she mourns the loss of her grandfather - indifferent and unaware of the hunt happening around her. It's not until she meets Marina, a young hitchhiker lost in New Mexico that the girls get swept up in the rush. \n## Licenses\nThis program contains free software licensed under a number of licenses,\nincluding the GNU Lesser General Public License. A complete list of software\nis available at http://www.renpy.org/doc/html/license.html.\n",
+    "inst": "Buy the game on itch io (this is because it has the necessary aarch64 version of the game compiled). Download the unified zip. unzip it and put the contents into the gamefiles directory of the port.",
+    "inst_md": null,
+    "genres": [
+      "visual novel"
+    ],
+    "image": null,
+    "rtr": true,
+    "exp": false,
+    "runtime": null,
+    "reqs": [
+      "!lowres"
+    ],
+    "arch": [
+      "aarch64"
+    ],
+    "min_glibc": ""
+  }
+}
