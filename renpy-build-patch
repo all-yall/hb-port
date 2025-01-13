@@ -1,0 +1,172 @@
+commit dc8aab3347cc0cc7ddd13763c6f2f0d276599f58
+Author: Ally Robinson <ally@purplish.blue>
+Date:   Thu Jan 9 20:41:56 2025 -0500
+
+    remove sdl as static dependency
+
+diff --git a/prepare.sh b/prepare.sh
+index 292c441..7b2cb46 100755
+--- a/prepare.sh
++++ b/prepare.sh
+@@ -53,9 +53,9 @@ sudo tar xzf "$BASE/prebuilt/clang_rt.tar.gz" -C /usr/lib/clang/15/lib/
+ 
+ # Install the programs and virtualenvs.
+ 
+-VENV="$ROOT/tmp/virtualenv.py3"
++export VENV="$ROOT/tmp/virtualenv.py3"
+ 
+-export RENPY_DEPS_INSTALL=/usr::/usr/lib/x86_64-linux-gnu/
++export RENPY_DEPS_INSTALL=/usr::/usr/lib/aarch64-linux-gnu
+ 
+-. $BASE/nightly/git.sh
++#. $BASE/nightly/git.sh
+ . $BASE/nightly/python.sh
+diff --git a/renpybuild/run.py b/renpybuild/run.py
+index d9b1eb6..78d853a 100644
+--- a/renpybuild/run.py
++++ b/renpybuild/run.py
+@@ -430,7 +430,12 @@ def build_environment(c):
+         c.var("ffi_cross_config", "--host={{ ffi_host_platform }} --build={{ build_platform }}")
+ 
+ 
+-def run(command, context, verbose=False, quiet=False):
++def run(command, context, verbose=True, quiet=False):
++    if command.startswith("ccache clang-15") and "-lSDL2" not in command:
++        command = command \
++                .replace("ccache clang-15", "ccache clang-15 -L/usr/lib/aarch64-linux-gnu/ -I/rb/dont-delete/SDL2_image-2.6.2/ -I/rb/dont-delete/include/") \
++                .replace("-DRENPY_BUILD", "-DRENPY_BUILD -lglib-2.0 -lSDL2 -lSDL2_image -lm -lpng  ")
++
+     args = shlex.split(command)
+ 
+     if verbose:
+@@ -453,6 +458,13 @@ class RunCommand(object):
+ 
+     def __init__(self, command, context):
+         command = context.expand(command)
++
++        if command.startswith("ccache clang-15") and "-lSDL2" not in command:
++            command = command \
++                    .replace("ccache clang-15", "ccache clang-15 -L/usr/lib/aarch64-linux-gnu/ -I/rb/dont-delete/SDL2_image-2.6.2/ -I/rb/dont-delete/include/") \
++                    .replace("-DRENPY_BUILD", "-DRENPY_BUILD -lglib-2.0 -lSDL2 -lSDL2_image -lm -lpng  ")
++
++
+         self.command = shlex.split(command)
+ 
+         self.cwd = context.cwd
+diff --git a/tars/CubismSdkForNative-4-r.6.2.zip.1 b/tars/CubismSdkForNative-4-r.6.2.zip.1
+new file mode 100644
+index 0000000..1d7e1a4
+Binary files /dev/null and b/tars/CubismSdkForNative-4-r.6.2.zip.1 differ
+diff --git a/tars/android-ndk-r25c-linux.zip.1 b/tars/android-ndk-r25c-linux.zip.1
+new file mode 100644
+index 0000000..fdd3e2b
+Binary files /dev/null and b/tars/android-ndk-r25c-linux.zip.1 differ
+diff --git a/tasks/__init__.py b/tasks/__init__.py
+index 3fe984a..5967ccd 100644
+--- a/tasks/__init__.py
++++ b/tasks/__init__.py
+@@ -40,8 +40,8 @@ from . import pyjnius
+ from . import pyobjus
+ from . import iossupport
+ 
+-from . import sdl2
+-from . import sdl2_image
++#from . import sdl2
++#from . import sdl2_image
+ 
+ from . import ffmpeg
+ 
+@@ -49,7 +49,6 @@ from . import fribidi
+ from . import freetype
+ from . import harfbuzz
+ from . import freetypehb
+-
+ from . import zsync
+ from . import sayvbs
+ from . import angle
+diff --git a/tasks/librenpy.py b/tasks/librenpy.py
+index 1337f68..79215f1 100644
+--- a/tasks/librenpy.py
++++ b/tasks/librenpy.py
+@@ -11,7 +11,7 @@ def clean(c: Context):
+ def gen_static2(c: Context):
+ 
+     c.chdir("{{ renpy }}/module")
+-    c.env("RENPY_DEPS_INSTALL", "/usr::/usr/lib/x86_64-linux-gnu/")
++    c.env("RENPY_DEPS_INSTALL", "/usr::/usr/lib/aarch64-linux-gnu/")
+     c.env("RENPY_STATIC", "1")
+     c.run("{{ hostpython }} setup.py generate")
+ 
+@@ -20,8 +20,9 @@ def gen_static2(c: Context):
+ def gen_static3(c: Context):
+ 
+     c.chdir("{{ renpy }}/module")
+-    c.env("RENPY_DEPS_INSTALL", "/usr::/usr/lib/x86_64-linux-gnu/")
++    c.env("RENPY_DEPS_INSTALL", "/usr::/usr/lib/aarch64-linux-gnu/")
+     c.env("RENPY_STATIC", "1")
++    print(">> FAILED AROUND HERER")
+     c.run("{{ hostpython }} setup.py generate")
+ 
+ 
+diff --git a/tasks/python3.py b/tasks/python3.py
+index b83f69c..49c59e3 100644
+--- a/tasks/python3.py
++++ b/tasks/python3.py
+@@ -112,6 +112,22 @@ def common(c: Context):
+             f.write("ac_cv_file__dev_ptc=no\n")
+ 
+ 
++def common_post(c: Context):
++    c.generate("{{ source }}/Python-{{ version }}-Setup.stdlib", "Modules/Setup.stdlib")
++    c.generate("{{ source }}/Python-{{ version }}-Setup.stdlib", "Modules/Setup")
++
++    c.run("""{{ make }}""")
++    c.run("""{{ make }} install""")
++
++    c.copy("{{ host }}/bin/python3", "{{ install }}/bin/hostpython3")
++
++    for i in [ "_sysconfigdata__linux_aarch64-linux-gnu.py" ]:
++        c.var("i", i)
++
++        c.copy(
++            "{{ host }}/lib/{{pythonver}}/{{ i }}",
++            "{{ install }}/lib/{{pythonver}}/{{ i }}")
++
+ 
+ @task(kind="python", pythons="3", platforms="linux,mac")
+ def build_posix(c: Context):
+@@ -223,7 +239,7 @@ def build_web(c: Context):
+     c.run("""{{ make }} install""")
+     c.copy("{{ host }}/web/bin/python3", "{{ install }}/bin/hostpython3")
+ 
+-    for i in [ "ssl.py", "_sysconfigdata__linux_x86_64-linux-gnu.py" ]:
++    for i in [ "ssl.py", "_sysconfigdata__linux_aarch64-linux-gnu.py" ]:
+         c.var("i", i)
+ 
+         c.copy(
+diff --git a/tasks/pythonlib.py b/tasks/pythonlib.py
+index b10134d..9bb5296 100644
+--- a/tasks/pythonlib.py
++++ b/tasks/pythonlib.py
+@@ -524,7 +524,7 @@ def python3(c: Context):
+                 dest.parent.mkdir(parents=True, exist_ok=True)
+                 shutil.copy(fn, dest)
+ 
+-    # used_rules.add("steamapi")
++    used_rules.add("steamapi")
+ 
+     if rules - used_rules:
+         if c.platform != "web":
+diff --git a/tasks/renpython.py b/tasks/renpython.py
+index 42d2042..77dfe80 100644
+--- a/tasks/renpython.py
++++ b/tasks/renpython.py
+@@ -53,6 +53,8 @@ def link_linux(c: Context):
+     -o librenpython.so
+     librenpython.o
+ 
++    -L/usr/lib/aarch64-linux-gnu/
++
+     -lrenpy
+     -l{{ pythonver }}
+ 
