@@ -167,3 +167,6 @@ rm -rf ./gamefiles/lib/py3-windows-i686
 rm -rf ./gamefiles/lib/py3-mac-universal
 rm -rf ./gamefiles/lib/py3-windows-x86_64/
 rm -rf ./gamefiles/HighwayBlossoms.app
+
+# indicates that this file finished running
+touch has_been_patched

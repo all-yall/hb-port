@@ -17,6 +17,8 @@ fi
 
 source $controlfolder/control.txt
 
+# Variables 
+
 PORTEXEC="HighwayBlossoms.sh"
 GAMEDIR="/$directory/ports/highwayblossoms"
 GL4ES_LIBS="$GAMEDIR/gl4es"
@@ -30,8 +32,9 @@ get_controls
 
 cd "$GAMEDIR"
 
-set -e
-
+# this step isn't required, though it will make
+# the game more playable. The file being checked
+# for is created in the downscale_assets.sh script
 if [ ! -f "$GAMEDIR/has_been_patched" ]; then
 	export PATCHER_FILE="$GAMEDIR/downscale_assets.sh"
 	export PATCHER_GAME="Highway Blossoms"
@@ -40,13 +43,14 @@ if [ ! -f "$GAMEDIR/has_been_patched" ]; then
   export LOVE_GRAPHICS_USE_OPENGLES=1
 
 	# This will take a WHILE if this is the first run!
-	source "$controlfolder/utils/patcher.txt" || true
-	touch "$GAMEDIR/has_been_patched"
+	source "$controlfolder/utils/patcher.txt"
 fi
 
-# these interfere with the patcher, so the are below 
-export SDL_VIDEO_GL_DRIVER="$GL4ES_LIBS/libGL.so.1"
-export SDL_VIDEO_EGL_DRIVER="$GL4ES_LIBS/libEGL.so.1"
+# these interfere with the patcher, so the are below it
+if [ "$CFW_NAME" = "muOS" ]; then
+  export SDL_VIDEO_GL_DRIVER="$GL4ES_LIBS/libGL.so.1"
+  export SDL_VIDEO_EGL_DRIVER="$GL4ES_LIBS/libEGL.so.1"
+fi
 
 > "$GAMEDIR/log.txt" && exec > >(tee "$GAMEDIR/log.txt") 2>&1
 
@@ -57,8 +61,18 @@ else
   source "${controlfolder}/libgl_default.txt"
 fi
 
+# not a required command, just shows a splash while the
+# game loads
+mpv "$GAMEDIR/cover.png"
 
-cd gamefiles
+cd ./gamefiles
+
+# setup default settings so that text is legible
+SETTINGS_FOLDER="$GAMEDIR/gamefiles/game/saves/"
+if [ ! -f "$SETTINGS_FOLDER" ]; then
+  mkdir -p "$SETTINGS_FOLDER"
+  cp "$GAMEDIR/text_settings" "$SETTINGS_FOLDER/persistent"
+fi
 
 pm_platform_helper "$GAMEDIR/gamefiles/lib/py3-linux-aarch64/HighwayBlossoms"
 $GPTOKEYB "HighwayBlossoms" -c "$GAMEDIR/highwayblossoms.gptk" &
