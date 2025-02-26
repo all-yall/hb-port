@@ -19,9 +19,8 @@ any game files, but with them you should be able to play the game on some handhe
 such as the RG35XXSP and other aarch64 architecture devices.
 
 ## How do I use it? 
-Drop the entire contents of the `Highway\ Blossoms\ 1.2.5\ -\ Unified/` folder
-provided by buying the game on itch.io and then run the `./Highway Blossoms.sh`
-script to start it.
+Drop the entire contents of the `Highway\ Blossoms\ 1.2.5\ -\ Unified/game` folder
+into the `gamefiles` folder and then run the `./Highway Blossoms.sh` script to start it.
 
 ## Things to note!
 * The first time you run the game, it will take a while to start, like 15 minutes.
@@ -31,7 +30,8 @@ RAM
 
 * The menu interaction is a little weird in the base game with just keyboard,
 so similarly it is a little wonky on the gamepad navigating some of the menus,
-but it does work.
+but it does work. I recommend filling your save slots for easier navigation on 
+those screens
 
 * DLC files should work, though the next exit dlc will double the time for the first
 launch to actually start due to the increased number of files to downscale
@@ -43,6 +43,3 @@ launch to actually start due to the increased number of files to downscale
 * [gl4es](https://github.com/ptitSeb/gl4es) for being an essential library
 * [rpatool](https://github.com/shizmob/rpatool) for allowing unpacking and repacking of assets for downsampling
 * [ffmpeg](https://ffmpeg.org/) for being the most useful multimedia tool
-
-
-
